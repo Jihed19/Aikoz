@@ -1,0 +1,6 @@
+{
+  "name": "Aikoz Hipermercado",
+  "description": "App web móvil y desktop para Aikoz Hipermercado con compras online, Sorteo 0 KM Manos al Volante, integración Cashea, cupones y checkout multimoneda.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

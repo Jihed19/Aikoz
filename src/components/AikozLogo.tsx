@@ -23,42 +23,46 @@ export const AikozLogo: React.FC<AikozLogoProps> = ({
 
   const currentHeight = sizeClasses[size] || 'h-8';
 
-  // Exact Brand Colors from official branding assets:
-  // Yellow/Gold: #F1A811
-  // Leaf Green: #6FA638
-  // Dark Green Accent: #0F7638
-  const yellowColor = variant === 'white' ? '#FFFFFF' : '#F1A811';
-  const greenColor = variant === 'white' ? '#FFFFFF' : '#6FA638';
+  // Exact Brand Colors from the uploaded brand logo:
+  // Warm Golden Yellow: #E5A114
+  // Fresh Leaf Green: #78AB3E
+  const yellowColor = variant === 'white' ? '#FFFFFF' : '#E5A114';
+  const greenColor = variant === 'white' ? '#FFFFFF' : '#78AB3E';
 
   if (variant === 'badge') {
     return (
       <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white shadow-xs border border-emerald-100 ${className}`}>
-        <svg viewBox="0 0 110 40" className="h-6 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
-          {/* 'a' - yellow */}
-          <text x="5" y="24" fontFamily="'Outfit', 'Poppins', 'Century Gothic', system-ui, sans-serif" fontWeight="800" fontSize="22" fill={yellowColor}>
-            a
-          </text>
-          {/* 'i' stem green, dot yellow */}
-          <text x="21" y="24" fontFamily="'Outfit', 'Poppins', 'Century Gothic', system-ui, sans-serif" fontWeight="800" fontSize="22" fill={greenColor}>
-            ı
-          </text>
-          <circle cx="23.5" cy="8.5" r="2.5" fill={yellowColor} />
-          {/* 'k' - green */}
-          <text x="29" y="24" fontFamily="'Outfit', 'Poppins', 'Century Gothic', system-ui, sans-serif" fontWeight="800" fontSize="22" fill={greenColor}>
-            k
-          </text>
-          {/* 'o' - green */}
-          <text x="44" y="24" fontFamily="'Outfit', 'Poppins', 'Century Gothic', system-ui, sans-serif" fontWeight="800" fontSize="22" fill={greenColor}>
-            o
-          </text>
-          {/* 'z' - yellow */}
-          <text x="60" y="24" fontFamily="'Outfit', 'Poppins', 'Century Gothic', system-ui, sans-serif" fontWeight="800" fontSize="22" fill={yellowColor}>
-            z
-          </text>
-          {/* Iconic Smile Curve */}
+        <svg viewBox="0 0 160 85" className="h-6 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* 'a' - Warm Yellow */}
           <path
-            d="M 6 30 C 25 38, 55 38, 73 30 C 55 35, 25 35, 6 30 Z"
+            d="M 39 27.5 L 39 49.5 C 39 50 38.6 50.4 38.1 50.4 L 35.8 50.4 C 34.8 50.4 34.3 49.7 34 48.9 C 32.4 50.2 30 51 27 51 C 20 51 15 45.6 15 38.5 C 15 31.4 20 26 27 26 C 30.2 26 32.6 27.1 34 28.8 L 34.2 27.5 C 34.2 27 34.6 26.4 35.4 26.4 L 38.2 26.4 C 38.7 26.4 39 27 39 27.5 Z M 33.8 38.5 C 33.8 34.2 30.6 31.2 27 31.2 C 23.2 31.2 20.3 34.2 20.3 38.5 C 20.3 42.8 23.2 45.8 27 45.8 C 30.6 45.8 33.8 42.8 33.8 38.5 Z"
+            fill={yellowColor}
+          />
+          {/* 'i' - Square yellow dot, green stem */}
+          <rect x="48" y="16.5" width="5.5" height="5.5" rx="0.5" fill={yellowColor} />
+          <rect x="48" y="26.5" width="5.5" height="24" rx="0.5" fill={greenColor} />
+          {/* 'k' - Green */}
+          <path
+            d="M 61.5 16.5 L 67 16.5 L 67 33.5 L 77.5 26.5 L 84.5 26.5 L 73.5 37 L 85.5 50.5 L 78 50.5 L 67 38.5 L 67 50.5 L 61.5 50.5 Z"
             fill={greenColor}
+          />
+          {/* 'o' - Green */}
+          <path
+            d="M 104.5 26 C 111.7 26 117 31.6 117 38.5 C 117 45.4 111.7 51 104.5 51 C 97.3 51 92 45.4 92 38.5 C 92 31.6 97.3 26 104.5 26 Z M 104.5 31.2 C 100.4 31.2 97.3 34.4 97.3 38.5 C 97.3 42.6 100.4 45.8 104.5 45.8 C 108.6 45.8 111.7 42.6 111.7 38.5 C 111.7 34.4 108.6 31.2 104.5 31.2 Z"
+            fill={greenColor}
+          />
+          {/* 'z' - Yellow */}
+          <path
+            d="M 124.5 26.5 L 147 26.5 L 147 31.5 L 132 45.5 L 147.5 45.5 L 147.5 50.5 L 123.5 50.5 L 123.5 45.5 L 138 31.5 L 124.5 31.5 Z"
+            fill={yellowColor}
+          />
+          {/* Smile Curve */}
+          <path
+            d="M 23 58 C 36 82, 120 82, 135 58"
+            stroke={greenColor}
+            strokeWidth="5.5"
+            strokeLinecap="round"
+            fill="none"
           />
         </svg>
       </div>
@@ -66,63 +70,59 @@ export const AikozLogo: React.FC<AikozLogoProps> = ({
   }
 
   return (
-    <div className={`inline-flex flex-col items-start select-none ${className}`}>
+    <div className={`inline-flex flex-col items-center select-none ${className}`}>
       <div className="flex items-center">
         <svg
-          viewBox="0 0 130 42"
+          viewBox="0 0 170 95"
           className={`${currentHeight} w-auto`}
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <defs>
-            <filter id="aikoz-glow" x="-10%" y="-10%" width="120%" height="120%">
-              <feDropShadow dx="0" dy="1" stdDeviation="0.5" floodOpacity="0.15" />
-            </filter>
-          </defs>
-
-          {/* Letter a (Warm Golden Yellow) */}
+          {/* 'a' - Warm Yellow (#E5A114) */}
           <path
-            d="M 12 28 C 12 29 13.5 29.5 15.5 29.5 C 19 29.5 22 27 22 23.5 L 22 13 C 22 11.5 21 10.5 19.5 10.5 C 17.5 10.5 16 11.5 15 12.5 C 13.5 11 11.5 10.5 9 10.5 C 4 10.5 0.5 14.5 0.5 20 C 0.5 25.5 4 29.5 9.5 29.5 C 12.5 29.5 14.5 28 15.5 26.5 L 15.5 28 C 15.5 29.5 14 30.5 12 30.5 L 12 28 Z M 15.5 20 C 15.5 23.5 13.5 25.5 10 25.5 C 6.5 25.5 4.8 23 4.8 20 C 4.8 17 6.5 14.5 10 14.5 C 13.5 14.5 15.5 16.5 15.5 20 Z"
-            fill={yellowColor}
-            transform="translate(4, 0)"
-          />
-
-          {/* Letter i: Yellow circular dot + Green stem */}
-          <circle cx="34" cy="9.5" r="3.2" fill={yellowColor} />
-          <rect x="31" y="15" width="6" height="14" rx="3" fill={greenColor} />
-
-          {/* Letter k: Green */}
-          <path
-            d="M 43 5 C 43 3.5 44.5 2.5 46 2.5 C 47.5 2.5 49 3.5 49 5 L 49 18.5 L 56.5 14 C 58 13 60 14 60.5 15.5 C 61 17 60 18.5 58.5 19.5 L 52.5 23 L 60.5 28 C 62 29 62 31 60.5 32 C 59.5 32.8 58 32.5 57 31.5 L 49 26 L 49 28 C 49 29.5 47.5 30.5 46 30.5 C 44.5 30.5 43 29.5 43 28 L 43 5 Z"
-            fill={greenColor}
-          />
-
-          {/* Letter o: Green round bowl */}
-          <path
-            d="M 75 10.5 C 69.5 10.5 65 15 65 20.5 C 65 26 69.5 30.5 75 30.5 C 80.5 30.5 85 26 85 20.5 C 85 15 80.5 10.5 75 10.5 Z M 75 25.5 C 72 25.5 69.8 23.3 69.8 20.5 C 69.8 17.7 72 15.5 75 15.5 C 78 15.5 80.2 17.7 80.2 20.5 C 80.2 23.3 78 25.5 75 25.5 Z"
-            fill={greenColor}
-          />
-
-          {/* Letter z: Yellow */}
-          <path
-            d="M 91 14.5 C 91 13 92.5 12 94 12 L 104.5 12 C 106 12 107 13.5 106.2 14.8 L 97.5 26 L 105 26 C 106.5 26 107.5 27 107.5 28.5 C 107.5 30 106.5 31 105 31 L 93.5 31 C 92 31 91 29.5 91.8 28.2 L 100.5 17 L 94 17 C 92.5 17 91 16 91 14.5 Z"
+            d="M 41.5 29 L 41.5 53 C 41.5 53.6 41.1 54 40.5 54 L 38 54 C 36.9 54 36.4 53.2 36 52.3 C 34.3 53.7 31.6 54.6 28.5 54.6 C 20.8 54.6 15.2 48.7 15.2 41 C 15.2 33.3 20.8 27.4 28.5 27.4 C 32 27.4 34.6 28.6 36.2 30.5 L 36.4 29 C 36.4 28.4 36.9 27.8 37.8 27.8 L 40.8 27.8 C 41.3 27.8 41.5 28.4 41.5 29 Z M 35.8 41 C 35.8 36.3 32.3 33 28.4 33 C 24.3 33 21.2 36.3 21.2 41 C 21.2 45.7 24.3 49 28.4 49 C 32.3 49 35.8 45.7 35.8 41 Z"
             fill={yellowColor}
           />
 
-          {/* The Iconic Smile Arc (spans from underneath 'a' to 'z') */}
+          {/* 'i' - Square Yellow Dot, Leaf Green Stem (#78AB3E) */}
+          <rect x="51.5" y="17" width="6" height="6" rx="0.5" fill={yellowColor} />
+          <rect x="51.5" y="27.8" width="6" height="26.2" rx="0.5" fill={greenColor} />
+
+          {/* 'k' - Leaf Green (#78AB3E), top aligned with i dot */}
           <path
-            d="M 6 34.5 C 32 43, 82 43, 108 34.5 C 82 39.5, 32 39.5, 6 34.5 Z"
+            d="M 66 17 L 72 17 L 72 35.5 L 83.5 27.8 L 91 27.8 L 79 39.5 L 92 54 L 84 54 L 72 41 L 72 54 L 66 54 Z"
             fill={greenColor}
+          />
+
+          {/* 'o' - Leaf Green (#78AB3E) */}
+          <path
+            d="M 113 27.4 C 120.9 27.4 126.8 33.5 126.8 41 C 126.8 48.5 120.9 54.6 113 54.6 C 105.1 54.6 99.2 48.5 99.2 41 C 99.2 33.5 105.1 27.4 113 27.4 Z M 113 33 C 108.6 33 105.2 36.5 105.2 41 C 105.2 45.5 108.6 49 113 49 C 117.4 49 120.8 45.5 120.8 41 C 120.8 36.5 117.4 33 113 33 Z"
+            fill={greenColor}
+          />
+
+          {/* 'z' - Warm Yellow (#E5A114) */}
+          <path
+            d="M 135 27.8 L 159.5 27.8 L 159.5 33.2 L 143.5 48.6 L 160 48.6 L 160 54 L 134 54 L 134 48.6 L 150 33.2 L 135 33.2 Z"
+            fill={yellowColor}
+          />
+
+          {/* Smile Arc - Fresh Leaf Green (#78AB3E) */}
+          <path
+            d="M 24 62 C 38 88, 130 88, 147 62"
+            stroke={greenColor}
+            strokeWidth="6"
+            strokeLinecap="round"
+            fill="none"
           />
         </svg>
       </div>
 
-      {/* Official Slogan / Tagline */}
+      {/* Optional Brand Slogan / Subtitle */}
       {showSubtitle && (
-        <div className="flex items-center gap-1 -mt-0.5 pl-1.5">
+        <div className="w-full flex items-center justify-center -mt-0.5">
           <span
-            className={`text-[8.5px] font-black tracking-[0.28em] uppercase ${
-              variant === 'white' ? 'text-white/90' : 'text-[#0F7638]'
+            className={`text-[8.5px] font-black tracking-[0.26em] uppercase ${
+              variant === 'white' ? 'text-white/90' : 'text-[#78AB3E]'
             }`}
           >
             HIPERMERCADO

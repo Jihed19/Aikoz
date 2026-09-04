@@ -1,49 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="110" fill="#FFFFFF"/>
-  <!-- Circular ambient glow -->
-  <circle cx="256" cy="256" r="210" fill="#F4FBF6"/>
-  <circle cx="256" cy="256" r="190" fill="#FFFFFF" stroke="#E2F2E7" stroke-width="4"/>
-  
-  <!-- Aikoz Icon / Brand Waves -->
-  <g transform="translate(146, 120) scale(2.3)">
-    <!-- Yellow Wave -->
+  <!-- Clean Crisp White Background -->
+  <rect width="512" height="512" rx="112" fill="#FFFFFF"/>
+
+  <!-- Centered Logo Group: scaled and centered -->
+  <g transform="translate(48, 110) scale(2.45)">
+    <!-- 'a' - Warm Yellow (#E5A114) -->
     <path
-      d="M 18 72 C 14 50, 36 18, 70 14 C 74 13.5, 76 17, 72 19 C 45 27, 28 48, 25 73 C 24.5 76, 18.5 76, 18 72 Z"
-      fill="#F1A811"
+      d="M 41.5 29 L 41.5 53 C 41.5 53.6 41.1 54 40.5 54 L 38 54 C 36.9 54 36.4 53.2 36 52.3 C 34.3 53.7 31.6 54.6 28.5 54.6 C 20.8 54.6 15.2 48.7 15.2 41 C 15.2 33.3 20.8 27.4 28.5 27.4 C 32 27.4 34.6 28.6 36.2 30.5 L 36.4 29 C 36.4 28.4 36.9 27.8 37.8 27.8 L 40.8 27.8 C 41.3 27.8 41.5 28.4 41.5 29 Z M 35.8 41 C 35.8 36.3 32.3 33 28.4 33 C 24.3 33 21.2 36.3 21.2 41 C 21.2 45.7 24.3 49 28.4 49 C 32.3 49 35.8 45.7 35.8 41 Z"
+      fill="#E5A114"
     />
-    <!-- Light Green Wave -->
+
+    <!-- 'i' - Square Yellow Dot, Leaf Green Stem (#78AB3E) -->
+    <rect x="51.5" y="17" width="6" height="6" rx="0.5" fill="#E5A114" />
+    <rect x="51.5" y="27.8" width="6" height="26.2" rx="0.5" fill="#78AB3E" />
+
+    <!-- 'k' - Leaf Green (#78AB3E) -->
     <path
-      d="M 28 80 C 26 62, 44 32, 78 28 C 82 27.5, 84 31, 80 33 C 54 41, 39 58, 35 81 C 34.5 84, 28.5 84, 28 80 Z"
-      fill="#82C91E"
+      d="M 66 17 L 72 17 L 72 35.5 L 83.5 27.8 L 91 27.8 L 79 39.5 L 92 54 L 84 54 L 72 41 L 72 54 L 66 54 Z"
+      fill="#78AB3E"
     />
-    <!-- Deep Brand Green Wave -->
+
+    <!-- 'o' - Leaf Green (#78AB3E) -->
     <path
-      d="M 38 88 C 38 72, 54 48, 86 44 C 90 43.5, 92 47, 88 49 C 64 57, 50 72, 46 89 C 45.5 92, 38.5 92, 38 88 Z"
-      fill="#5DBB63"
+      d="M 113 27.4 C 120.9 27.4 126.8 33.5 126.8 41 C 126.8 48.5 120.9 54.6 113 54.6 C 105.1 54.6 99.2 48.5 99.2 41 C 99.2 33.5 105.1 27.4 113 27.4 Z M 113 33 C 108.6 33 105.2 36.5 105.2 41 C 105.2 45.5 108.6 49 113 49 C 117.4 49 120.8 45.5 120.8 41 C 120.8 36.5 117.4 33 113 33 Z"
+      fill="#78AB3E"
+    />
+
+    <!-- 'z' - Warm Yellow (#E5A114) -->
+    <path
+      d="M 135 27.8 L 159.5 27.8 L 159.5 33.2 L 143.5 48.6 L 160 48.6 L 160 54 L 134 54 L 134 48.6 L 150 33.2 L 135 33.2 Z"
+      fill="#E5A114"
+    />
+
+    <!-- Smile Arc - Fresh Leaf Green (#78AB3E) -->
+    <path
+      d="M 24 62 C 38 88, 130 88, 147 62"
+      stroke="#78AB3E"
+      stroke-width="6"
+      stroke-linecap="round"
+      fill="none"
     />
   </g>
-
-  <!-- Brand Typography: aikoz -->
-  <text
-    x="256"
-    y="385"
-    text-anchor="middle"
-    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    font-weight="900"
-    font-size="62"
-    letter-spacing="3"
-    fill="#0F7638"
-  >aikoz</text>
-
-  <!-- Subtitle: HIPERMERCADO -->
-  <text
-    x="256"
-    y="420"
-    text-anchor="middle"
-    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    font-weight="800"
-    font-size="20"
-    letter-spacing="7"
-    fill="#F1A811"
-  >HIPERMERCADO</text>
 </svg>

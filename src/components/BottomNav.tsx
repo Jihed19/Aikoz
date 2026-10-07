@@ -23,11 +23,11 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     <>
       {/* Floating Cart Button (Pill with total USD and Bs.) */}
       {showFloatingCart && cartItemCount > 0 && activeTab !== 'carrito' && (
-        <div className="fixed bottom-20 right-4 z-40 animate-in fade-in slide-in-from-bottom-3 duration-200">
+        <div className="fixed bottom-20 left-0 right-0 max-w-md mx-auto pointer-events-none z-40 px-4 flex justify-end animate-in fade-in slide-in-from-bottom-3 duration-200">
           <button
             id="btn-floating-cart"
             onClick={() => onSelectTab('carrito')}
-            className="flex items-center gap-2.5 bg-[#0F7638] hover:bg-[#0D622F] text-white pl-3.5 pr-4 py-2.5 rounded-full shadow-xl hover:shadow-2xl active:scale-95 transition-all border border-emerald-400/30"
+            className="pointer-events-auto flex items-center gap-2.5 bg-[#0F7638] hover:bg-[#0D622F] text-white pl-3.5 pr-4 py-2.5 rounded-full shadow-xl hover:shadow-2xl active:scale-95 transition-all border border-emerald-400/30"
           >
             <div className="relative">
               <ShoppingBag className="w-5 h-5 text-white" />
@@ -46,7 +46,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       )}
 
       {/* Fixed Bottom Tab Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 max-w-lg mx-auto">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 max-w-md mx-auto">
         <div className="flex items-center justify-around px-2 py-1.5">
           {/* Tab 1: Inicio */}
           <button

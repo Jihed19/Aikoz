@@ -16,7 +16,11 @@ export const TicketDetailsModal: React.FC<TicketDetailsModalProps> = ({
   if (!ticket) return null;
 
   const handlePrint = () => {
-    window.print();
+    try {
+      window.print();
+    } catch {
+      // Gracefully handled if sandbox restricts window.print
+    }
   };
 
   return (

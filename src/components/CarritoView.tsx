@@ -95,11 +95,21 @@ export const CarritoView: React.FC<CarritoViewProps> = ({
   const deliveryDiscount = (deliveryMethod === 'delivery' && hasFreeDeliveryCoupon) ? 2.50 : 0.00;
   const effectiveDeliveryFee = Math.max(0, baseDeliveryCost - deliveryDiscount);
 
+  // Promotional coupons discount (percentage, fixed amount, bogo)
+  const promoCouponsDiscount = appliedCoupons
+    .filter((c) => c.discountType !== 'delivery')
+    .reduce((acc, c) => {
+      if (c.discountType === 'percentage') {
+        return acc + (subtotal * c.discountValue) / 100;
+      }
+      return acc + (c.discountValue || 0);
+    }, 0);
+
   // Points discount: $1.00 off for 100 points
   const pointsDiscount = useClubPoints ? 1.00 : 0.00;
 
   // Total discounts
-  const totalDiscount = deliveryDiscount + pointsDiscount;
+  const totalDiscount = deliveryDiscount + promoCouponsDiscount + pointsDiscount;
   const finalTotal = Math.max(0, subtotal + baseDeliveryCost - totalDiscount);
 
   // Cashea 3 installments
@@ -640,6 +650,13 @@ export const CarritoView: React.FC<CarritoViewProps> = ({
                 <div className="flex items-center justify-between text-emerald-700">
                   <span>🏷 Cupón de Entrega Gratis</span>
                   <span className="font-bold">-{formatUSD(deliveryDiscount)}</span>
+                </div>
+              )}
+
+              {promoCouponsDiscount > 0 && (
+                <div className="flex items-center justify-between text-emerald-700">
+                  <span>🏷 Descuento Cupones ({appliedCoupons.filter((c) => c.discountType !== 'delivery').map((c) => c.tag).join(', ')})</span>
+                  <span className="font-bold">-{formatUSD(promoCouponsDiscount)}</span>
                 </div>
               )}
 

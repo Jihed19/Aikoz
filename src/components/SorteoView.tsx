@@ -44,10 +44,6 @@ export const SorteoView: React.FC<SorteoViewProps> = ({
   const needed = targetSpent - currentSpent;
   const progressPercent = Math.round((currentSpent / targetSpent) * 100);
 
-  const handleLiveTuneIn = () => {
-    window.open('https://instagram.com', '_blank');
-  };
-
   return (
     <div className="pb-28 space-y-4">
       {/* 1. HERO EMERALD & GOLD BRAND HEADER */}
@@ -114,14 +110,16 @@ export const SorteoView: React.FC<SorteoViewProps> = ({
               <Video className="w-4 h-4 text-red-400" />
               <span className="text-[11px] font-medium">Transmisión en vivo por IG & YouTube</span>
             </div>
-            <button
+            <a
               id="btn-sintonizar-live"
-              onClick={handleLiveTuneIn}
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-white text-blue-900 hover:bg-blue-50 px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1 transition-transform active:scale-95 shadow-xs"
             >
               <span>Sintonizar</span>
               <ExternalLink className="w-3 h-3" />
-            </button>
+            </a>
           </div>
         </div>
       </div>

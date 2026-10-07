@@ -45,13 +45,6 @@ export const CuentaView: React.FC<CuentaViewProps> = ({
   const [biometricsEnabled, setBiometricsEnabled] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const openWhatsAppSupport = () => {
-    window.open(
-      'https://wa.me/584140000000?text=Hola%20Aikoz%20Hipermercado,%20necesito%20asistencia%20con%20mi%20cuenta%20Club%20VIP',
-      '_blank'
-    );
-  };
-
   return (
     <div className="pb-28 space-y-4">
       {/* 1. USER PROFILE HEADER */}
@@ -441,10 +434,12 @@ export const CuentaView: React.FC<CuentaViewProps> = ({
 
         <div className="grid grid-cols-2 gap-2.5">
           {/* WhatsApp Card */}
-          <button
+          <a
             id="btn-whatsapp-support"
-            onClick={openWhatsAppSupport}
-            className="bg-white hover:bg-emerald-50/50 p-3.5 rounded-2xl border border-slate-100 shadow-2xs text-left transition-all group"
+            href="https://wa.me/584140000000?text=Hola%20Aikoz%20Hipermercado,%20necesito%20asistencia%20con%20mi%20cuenta%20Club%20VIP"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white hover:bg-emerald-50/50 p-3.5 rounded-2xl border border-slate-100 shadow-2xs text-left transition-all group block"
           >
             <div className="flex items-center justify-between mb-2">
               <div className="w-8 h-8 rounded-xl bg-emerald-100 text-[#0F7638] flex items-center justify-center">
@@ -460,7 +455,7 @@ export const CuentaView: React.FC<CuentaViewProps> = ({
             <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">
               Atención y pedidos por chat
             </p>
-          </button>
+          </a>
 
           {/* Preguntas Sorteo FAQ */}
           <button

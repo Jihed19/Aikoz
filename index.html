@@ -14,11 +14,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- PWA Configuration -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#5DBB63">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
 
     <!-- Android & iOS Standalone Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -35,7 +35,7 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
-          navigator.serviceWorker.register('./sw.js').catch(function () {});
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
         });
       }
     </script>

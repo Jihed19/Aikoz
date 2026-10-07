@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, MapPin, QrCode, Search, Sparkles, X } from 'lucide-react';
+import { ChevronDown, MapPin, QrCode, Search, Sparkles, User, X } from 'lucide-react';
 import { StoreLocation } from '../types';
 import { AikozLogo } from './AikozLogo';
 
@@ -12,6 +12,9 @@ interface HeaderProps {
   onOpenScanner: () => void;
   onOpenSorteo: () => void;
   onOpenCasheaInfo: () => void;
+  onOpenAuth?: (mode?: 'login' | 'register') => void;
+  isFirebaseUser?: boolean;
+  userName?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -23,6 +26,9 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenScanner,
   onOpenSorteo,
   onOpenCasheaInfo,
+  onOpenAuth,
+  isFirebaseUser = false,
+  userName = '',
 }) => {
   const [showStoreDropdown, setShowStoreDropdown] = useState(false);
 
@@ -115,6 +121,24 @@ export const Header: React.FC<HeaderProps> = ({
               C
             </span>
             <span className="text-[10px] font-black tracking-wide hidden sm:inline">CASHEA</span>
+          </button>
+
+          {/* User Account / Iniciar Sesión Action */}
+          <button
+            id="btn-header-account"
+            type="button"
+            onClick={() => onOpenAuth?.(isFirebaseUser ? 'login' : 'login')}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
+              isFirebaseUser
+                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
+                : 'bg-slate-900 hover:bg-slate-800 text-white'
+            }`}
+            title={isFirebaseUser ? `Conectado como ${userName}` : 'Iniciar sesión o crear cuenta'}
+          >
+            <User className="w-3.5 h-3.5 shrink-0" />
+            <span className="text-[10px] font-black tracking-wide hidden sm:inline">
+              {isFirebaseUser ? (userName ? userName.split(' ')[0] : 'Mi Cuenta') : 'Ingresar'}
+            </span>
           </button>
         </div>
       </div>

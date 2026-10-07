@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged, signInWithPopup, signOut, User as FirebaseUser } from 'firebase/auth';
+import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { BottomNav, TabType } from './components/BottomNav';
 import { CarritoView } from './components/CarritoView';
 import { CasheaModal } from './components/CasheaModal';
@@ -11,6 +13,7 @@ import { PasillosView } from './components/PasillosView';
 import { ScannerModal } from './components/ScannerModal';
 import { SorteoView } from './components/SorteoView';
 import { TicketDetailsModal } from './components/TicketDetailsModal';
+import { AuthModal } from './components/AuthModal';
 import {
   INITIAL_COUPONS,
   INITIAL_PRODUCTS,
@@ -18,6 +21,14 @@ import {
   INITIAL_USER,
   STORE_LOCATIONS,
 } from './data/mockData';
+import {
+  auth,
+  db,
+  googleProvider,
+  testFirestoreConnection,
+  handleFirestoreError,
+  OperationType,
+} from './firebase';
 import { CartItem, Coupon, Product, StoreLocation, Ticket, UserProfile } from './types';
 import { triggerConfetti } from './utils/formatters';
 
@@ -26,13 +37,73 @@ export default function App() {
   const [currentStore, setCurrentStore] = useState<StoreLocation>(STORE_LOCATIONS[0]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
 
-  // Initial simulated data fetch to demonstrate clean skeleton loaders
+  // Initial simulated data fetch to demonstrate clean skeleton loaders & test Firebase connection
   useEffect(() => {
+    testFirestoreConnection().catch(() => {});
+
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 600);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Firebase Auth State Observer and Firestore Realtime Sync
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+      setFirebaseUser(fbUser);
+      if (fbUser) {
+        setUser((prev) => ({
+          ...prev,
+          name: fbUser.displayName || prev.name,
+          email: fbUser.email || prev.email,
+          avatarUrl: fbUser.photoURL || prev.avatarUrl,
+          isVerified: fbUser.emailVerified || true,
+        }));
+
+        // Sync or register user in Firestore
+        try {
+          await setDoc(
+            doc(db, 'users', fbUser.uid),
+            {
+              userId: fbUser.uid,
+              name: fbUser.displayName || 'Usuario Aikoz',
+              email: fbUser.email || '',
+              memberTier: 'Oro',
+            },
+            { merge: true }
+          );
+        } catch (error) {
+          console.warn('Notice: Firestore user profile sync', error);
+        }
+
+        // Listen to tickets in Firestore
+        try {
+          const ticketsCol = collection(db, 'users', fbUser.uid, 'tickets');
+          const unsubTickets = onSnapshot(
+            ticketsCol,
+            (snapshot) => {
+              if (!snapshot.empty) {
+                const cloudTickets: Ticket[] = snapshot.docs.map((d) => d.data() as Ticket);
+                setTickets((prev) => {
+                  const cloudIds = new Set(cloudTickets.map((t) => t.id));
+                  return [...cloudTickets, ...prev.filter((t) => !cloudIds.has(t.id))];
+                });
+              }
+            },
+            (error) => {
+              console.warn('Notice: Firestore tickets listener', error);
+            }
+          );
+          return () => unsubTickets();
+        } catch (error) {
+          console.warn('Notice: Setting up tickets sync', error);
+        }
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const handleSelectStore = (store: StoreLocation) => {
@@ -61,6 +132,13 @@ export default function App() {
   const [selectedTicketForDetails, setSelectedTicketForDetails] = useState<Ticket | null>(null);
   const [isCasheaModalOpen, setIsCasheaModalOpen] = useState(false);
   const [giftCardAction, setGiftCardAction] = useState<'recharge' | 'transfer' | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
+
+  const handleOpenAuth = (mode: 'login' | 'register' = 'login') => {
+    setAuthModalMode(mode);
+    setIsAuthModalOpen(true);
+  };
 
   // Cart total calculations
   const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -142,17 +220,44 @@ export default function App() {
     triggerConfetti();
   };
 
+  // Login with Google or Email (opens Auth modal)
+  const handleLoginWithGoogle = () => {
+    handleOpenAuth('login');
+  };
+
+  // Logout
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setFirebaseUser(null);
+      setUser(INITIAL_USER);
+    } catch (err) {
+      console.warn('Firebase Sign-Out notice:', err);
+    }
+  };
+
   // New ticket scanned handler
-  const handleTicketScanned = (newTicket: Ticket) => {
+  const handleTicketScanned = async (newTicket: Ticket) => {
     setTickets((prev) => [newTicket, ...prev]);
     setUser((prev) => ({
       ...prev,
       ticketsCount: prev.ticketsCount + 1,
     }));
+
+    if (auth.currentUser) {
+      try {
+        await setDoc(doc(db, 'users', auth.currentUser.uid, 'tickets', newTicket.id), {
+          ...newTicket,
+          userId: auth.currentUser.uid,
+        });
+      } catch (err) {
+        console.warn('Notice: Firestore save scanned ticket', err);
+      }
+    }
   };
 
   // Order success handler
-  const handleOrderSuccess = ({
+  const handleOrderSuccess = async ({
     total,
     ticketsEarned,
   }: {
@@ -167,7 +272,7 @@ export default function App() {
       store: currentStore.name,
       purchaseAmount: total,
       isValidated: true,
-      source: 'app',
+      source: 'app' as const,
       opportunities: 1,
     }));
 
@@ -177,6 +282,34 @@ export default function App() {
       ticketsCount: prev.ticketsCount + ticketsEarned,
       clubPoints: prev.clubPoints + Math.round(total * 2),
     }));
+
+    // Save to Firestore if authenticated
+    if (auth.currentUser) {
+      const uid = auth.currentUser.uid;
+      for (const t of generatedTickets) {
+        try {
+          await setDoc(doc(db, 'users', uid, 'tickets', t.id), {
+            ...t,
+            userId: uid,
+          });
+        } catch (e) {
+          console.warn('Notice: Firestore save order ticket', e);
+        }
+      }
+
+      try {
+        await setDoc(doc(db, 'users', uid, 'orders', `order-${Date.now()}`), {
+          orderId: `order-${Date.now()}`,
+          userId: uid,
+          totalUSD: total,
+          status: 'completed',
+          itemCount: ticketsEarned,
+          createdAt: new Date().toISOString(),
+        });
+      } catch (e) {
+        console.warn('Notice: Firestore save order', e);
+      }
+    }
 
     // Reset cart
     setCart([]);
@@ -207,6 +340,9 @@ export default function App() {
             onOpenScanner={() => setIsScannerOpen(true)}
             onOpenSorteo={() => setActiveTab('sorteo')}
             onOpenCasheaInfo={() => setIsCasheaModalOpen(true)}
+            onOpenAuth={handleOpenAuth}
+            isFirebaseUser={Boolean(firebaseUser)}
+            userName={user.name}
           />
         )}
 
@@ -274,6 +410,9 @@ export default function App() {
               onOpenSorteo={() => setActiveTab('sorteo')}
               onOpenOrders={() => setActiveTab('carrito')}
               onOpenCasheaInfo={() => setIsCasheaModalOpen(true)}
+              onOpenAuth={handleOpenAuth}
+              onLogout={handleLogout}
+              isFirebaseUser={Boolean(firebaseUser)}
             />
           )}
 
@@ -328,6 +467,19 @@ export default function App() {
           onUpdateBalance={(newBalance) =>
             setUser((prev) => ({ ...prev, giftCardBalance: newBalance }))
           }
+        />
+
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          initialMode={authModalMode}
+          onAuthSuccess={(name, email) => {
+            setUser((prev) => ({
+              ...prev,
+              name,
+              email,
+            }));
+          }}
         />
       </div>
     </div>

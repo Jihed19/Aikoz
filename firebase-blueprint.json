@@ -1,0 +1,142 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account profile for Aikoz Hipermercado",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique Firebase Authentication UID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the user",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user",
+          "maxLength": 150
+        },
+        "memberTier": {
+          "type": "string",
+          "description": "Loyalty tier",
+          "enum": ["Plata", "Oro", "Diamante"]
+        },
+        "ticketsCount": {
+          "type": "number",
+          "description": "Number of accumulated raffle tickets"
+        },
+        "clubPoints": {
+          "type": "number",
+          "description": "Accumulated Aikoz Club loyalty points"
+        },
+        "giftCardBalance": {
+          "type": "number",
+          "description": "Aikoz Gift Card digital balance in USD"
+        },
+        "avatarUrl": {
+          "type": "string",
+          "description": "Profile picture URL"
+        }
+      },
+      "required": ["userId", "name", "email"]
+    },
+    "Ticket": {
+      "title": "Ticket",
+      "description": "Raffle ticket for Sorteo 0 KM Manos al Volante",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Ticket document ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID"
+        },
+        "code": {
+          "type": "string",
+          "description": "Formatted ticket code (e.g. AKZ-78219)",
+          "maxLength": 30
+        },
+        "date": {
+          "type": "string",
+          "description": "Date and time of ticket generation",
+          "maxLength": 50
+        },
+        "store": {
+          "type": "string",
+          "description": "Store branch where the purchase occurred",
+          "maxLength": 100
+        },
+        "purchaseAmount": {
+          "type": "number",
+          "description": "Purchase total in USD"
+        },
+        "isValidated": {
+          "type": "boolean",
+          "description": "Whether the fiscal ticket has been validated"
+        },
+        "source": {
+          "type": "string",
+          "description": "Generation origin",
+          "enum": ["app", "fiscal_ticket"]
+        },
+        "opportunities": {
+          "type": "number",
+          "description": "Number of chances in the draw"
+        }
+      },
+      "required": ["id", "userId", "code", "purchaseAmount", "isValidated"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer purchase order",
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "description": "Unique order identifier"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Purchaser user UID"
+        },
+        "totalUSD": {
+          "type": "number",
+          "description": "Total amount in USD"
+        },
+        "status": {
+          "type": "string",
+          "description": "Order processing status",
+          "enum": ["pending", "completed", "cancelled"]
+        },
+        "itemCount": {
+          "type": "number",
+          "description": "Number of items in the order"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["orderId", "userId", "totalUSD", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Stores individual user account data"
+    },
+    "/users/{userId}/tickets/{ticketId}": {
+      "schema": "Ticket",
+      "description": "Stores user raffle tickets for Sorteo 0 KM"
+    },
+    "/users/{userId}/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Stores customer purchase history"
+    }
+  }
+}

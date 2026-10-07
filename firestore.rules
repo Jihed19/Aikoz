@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Catch-all Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common security primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // User Profile Rules
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false; // Deny public scraping of user profiles
+
+      allow create: if isOwner(userId)
+        && isValidId(userId)
+        && request.resource.data.keys().hasAll(['userId', 'name', 'email'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 100
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 150;
+
+      allow update: if isOwner(userId)
+        && request.resource.data.userId == existing().userId
+        && request.resource.data.email == existing().email;
+
+      allow delete: if false; // Prevent accidental account deletion
+
+      // User Tickets Subcollection (Sorteo 0 KM)
+      match /tickets/{ticketId} {
+        allow read: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && isValidId(ticketId)
+          && request.resource.data.keys().hasAll(['id', 'userId', 'code', 'purchaseAmount', 'isValidated'])
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.code is string
+          && request.resource.data.code.size() <= 30
+          && request.resource.data.purchaseAmount is number
+          && request.resource.data.purchaseAmount >= 0;
+
+        allow update: if isOwner(userId)
+          && request.resource.data.userId == existing().userId
+          && request.resource.data.id == existing().id;
+
+        allow delete: if isOwner(userId);
+      }
+
+      // User Orders Subcollection
+      match /orders/{orderId} {
+        allow read: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && isValidId(orderId)
+          && request.resource.data.keys().hasAll(['orderId', 'userId', 'totalUSD', 'status'])
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.totalUSD is number
+          && request.resource.data.totalUSD >= 0;
+
+        allow update: if isOwner(userId)
+          && request.resource.data.userId == existing().userId;
+
+        allow delete: if false;
+      }
+    }
+  }
+}

@@ -49,6 +49,28 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Real-time synchronization with Firestore 'products' collection
+  useEffect(() => {
+    try {
+      const productsCol = collection(db, 'products');
+      const unsubscribe = onSnapshot(
+        productsCol,
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const firestoreProducts: Product[] = snapshot.docs.map((d) => d.data() as Product);
+            setProducts(firestoreProducts);
+          }
+        },
+        (error) => {
+          console.warn('Notice: Firestore products listener', error);
+        }
+      );
+      return () => unsubscribe();
+    } catch (e) {
+      console.warn('Notice: Could not attach products listener', e);
+    }
+  }, []);
+
   // Firebase Auth State Observer and Firestore Realtime Sync
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {

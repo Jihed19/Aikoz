@@ -1,5 +1,65 @@
 {
   "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Supermarket product catalogue item in Aikoz Hipermercado",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique product code/identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the product",
+          "maxLength": 150
+        },
+        "brand": {
+          "type": "string",
+          "description": "Brand manufacturer",
+          "maxLength": 100
+        },
+        "category": {
+          "type": "string",
+          "description": "Category department",
+          "maxLength": 100
+        },
+        "priceUSD": {
+          "type": "number",
+          "description": "Unit sale price in USD"
+        },
+        "image": {
+          "type": "string",
+          "description": "Product illustration photo URL"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Packaging unit description"
+        },
+        "isAikozBrand": {
+          "type": "boolean",
+          "description": "Whether it is an Aikoz exclusive brand"
+        },
+        "badge": {
+          "type": "string",
+          "description": "Promotional tag or loyalty badge"
+        },
+        "badgeType": {
+          "type": "string",
+          "description": "Color theme for badge",
+          "enum": ["orange", "green", "blue", "yellow"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Nutritional or promotional details"
+        },
+        "popular": {
+          "type": "boolean",
+          "description": "Highlighted in hot picks"
+        }
+      },
+      "required": ["id", "name", "brand", "category", "priceUSD", "image"]
+    },
     "UserProfile": {
       "title": "UserProfile",
       "description": "User account profile for Aikoz Hipermercado",
@@ -126,6 +186,10 @@
     }
   },
   "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Public catalog of supermarket products"
+    },
     "/users/{userId}": {
       "schema": "UserProfile",
       "description": "Stores individual user account data"
